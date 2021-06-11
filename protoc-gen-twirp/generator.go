@@ -261,7 +261,7 @@ func (t *twirp) generateFileHeader(file *descriptor.FileDescriptorProto) {
 	if t.filesHandled == 0 {
 		t.P("/*")
 		t.P("Package ", t.genPkgName, " is a generated twirp stub package.")
-		t.P("This code was generated with github.com/twitchtv/twirp/protoc-gen-twirp ", gen.Version, ".")
+		t.P("This code was generated with github.com/tclem/twirp/protoc-gen-twirp ", gen.Version, ".")
 		t.P()
 		comment, err := t.reg.FileComments(file)
 		if err == nil && comment.Leading != "" {
@@ -274,8 +274,14 @@ func (t *twirp) generateFileHeader(file *descriptor.FileDescriptorProto) {
 			t.P()
 		}
 		t.P("It is generated from these files:")
+
+		names := []string{}
 		for _, f := range t.genFiles {
-			t.P("\t", f.GetName())
+			names = append(names, f.GetName())
+		}
+		sort.Strings(names)
+		for _, n := range names {
+			t.P("\t", n)
 		}
 		t.P("*/")
 	}
